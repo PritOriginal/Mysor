@@ -2,6 +2,8 @@ package com.example.mysor
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.mysor.listeners.OnLabelsListener
+import com.example.mysor.server.GetLabels
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -12,8 +14,9 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import java.util.*
+import kotlin.collections.ArrayList
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
 
     private lateinit var mMap: GoogleMap
 
@@ -43,5 +46,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.addMarker(MarkerOptions().position(sydney).title("Тамбов"))
             .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
+        var getLabels = GetLabels(this)
+    }
+
+    override fun onLabelsCompleted(labels: ArrayList<Label>) {
+        for (label in labels) {
+            var coordinate = label.getCoordinates()
+            mMap.addMarker(MarkerOptions().position(coordinate))
+                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish))
+        }
+    }
+
+    override fun onLabelsError(error: String) {
+        TODO("Not yet implemented")
     }
 }

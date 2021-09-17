@@ -1,10 +1,13 @@
 package com.example.mysor
 
-class Label (private var coordinates : String, private var description: String, private var type: String) {
-    fun setCoordinates(coordinates: String) {
+import com.google.android.gms.maps.model.LatLng
+
+class Label (private var id : Int, private var coordinates : LatLng, private var description: String, private var type: String) {
+
+    fun setCoordinates(coordinates: LatLng) {
         this.coordinates = coordinates
     }
-    fun getCoordinates(): String {
+    fun getCoordinates(): LatLng {
         return coordinates
     }
     fun setDescription(description: String) {
