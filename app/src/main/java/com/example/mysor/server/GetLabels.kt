@@ -1,7 +1,10 @@
 package com.example.mysor.server
 
+import android.content.Context
+import android.content.res.Resources
 import android.os.AsyncTask
 import com.example.mysor.Label
+import com.example.mysor.R
 import com.example.mysor.listeners.OnLabelsListener
 import com.google.android.gms.maps.model.LatLng
 import org.json.JSONObject
@@ -9,10 +12,11 @@ import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
 import java.net.URLEncoder
+import java.util.*
 
 
-class GetLabels(var listener: OnLabelsListener) : AsyncTask<URL, Integer, ArrayList<Label>>() {
-    lateinit var labels : ArrayList<Label>
+class GetLabels(var mContext : Context, var listener: OnLabelsListener) : AsyncTask<URL, Integer, ArrayList<Label>>() {
+    var labels = ArrayList<Label>()
 
     override fun doInBackground(vararg p0: URL?): ArrayList<Label> {
         var params = HashMap<String, String>()
@@ -35,7 +39,8 @@ class GetLabels(var listener: OnLabelsListener) : AsyncTask<URL, Integer, ArrayL
         }
 
         try {
-            val url = "http://192.168.243.90/PythonProject/server_test.py"
+            val res: Resources = mContext.getResources()
+            val url = res.getString(R.string.url)
             val urlObj = URL(url)
             val conn: HttpURLConnection = urlObj.openConnection() as HttpURLConnection
             try {
@@ -55,19 +60,18 @@ class GetLabels(var listener: OnLabelsListener) : AsyncTask<URL, Integer, ArrayL
                 e.printStackTrace()
             }
             try {
-                val `in`: InputStream = BufferedInputStream(conn.getInputStream())
-                val reader1 = BufferedReader(InputStreamReader(`in`))
-                val result1 = java.lang.StringBuilder()
-                var line: String
-                while (reader1.readLine().also { line = it } != null) {
-                    result1.append(
-                        """
-                            $line
-                            
-                            """.trimIndent()
-                    )
+                val in_: InputStream = BufferedInputStream(conn.inputStream)
+                val reader1 = BufferedReader(InputStreamReader(in_))
+                val result1 = StringBuilder()
+                var line = reader1.readLine()
+                while (line != null) {
+                    result1.append("""
+                        $line
+                        
+                        """.trimIndent())
+                    line = reader1.readLine()
                 }
-                `in`.close()
+                in_.close()
                 val result = result1.toString()
                 println("From server: $result")
                 val JObject = JSONObject(result)
@@ -77,19 +81,22 @@ class GetLabels(var listener: OnLabelsListener) : AsyncTask<URL, Integer, ArrayL
                     val jObject = jArray.getJSONObject(i)
                     val id = jObject.getInt("id")
                     val coordinates = jObject.getString("coordinates")
-                    var x : Float
-                    var y : Float
+                    var x = 0.0
+                    var y = 0.0
                     var s = StringBuilder()
-                    for (c in coordinates) {
+                    for ((i, c) in coordinates.withIndex()) {
                         if (c != ',') {
                             s.append(c)
+                        } else if (x == 0.0) {
+                            x = s.toString().toDouble()
+                            s.clear()
                         }
-                        else if (x == 0f) {
-                            x = s.toString().toFloat()
+                        if (i == coordinates.length - 1) {
+                            y = s.toString().toDouble()
                             s.clear()
                         }
                     }
-                    val LatCoordinates = LatLng(x, y))
+                    val LatCoordinates = LatLng(x, y)
                     val description = jObject.getString("description")
                     val type = jObject.getString("type")
                     val label = Label(id, LatCoordinates, description, type)

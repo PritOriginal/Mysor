@@ -46,7 +46,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
         mMap.addMarker(MarkerOptions().position(sydney).title("Тамбов"))
             .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
-        var getLabels = GetLabels(this)
+        var getLabels = GetLabels(this,this)
+        getLabels.execute()
     }
 
     override fun onLabelsCompleted(labels: ArrayList<Label>) {
