@@ -3,6 +3,8 @@ package com.example.mysor
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.mysor.listeners.OnLabelsListener
+import com.example.mysor.server.DownloadImageBitmapTask
+import com.example.mysor.server.DownloadImageTask
 import com.example.mysor.server.GetLabels
 
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -51,10 +53,13 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
     }
 
     override fun onLabelsCompleted(labels: ArrayList<Label>) {
+        var downloadImageBitmapTask = DownloadImageBitmapTask(this)
+        downloadImageBitmapTask.execute()
+        val image = downloadImageBitmapTask.get()
         for (label in labels) {
             var coordinate = label.getCoordinates()
             mMap.addMarker(MarkerOptions().position(coordinate))
-                .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish))
+                .setIcon(BitmapDescriptorFactory.fromBitmap(image))
         }
     }
 

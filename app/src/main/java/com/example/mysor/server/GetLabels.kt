@@ -39,7 +39,7 @@ class GetLabels(var mContext : Context, var listener: OnLabelsListener) : AsyncT
         }
 
         try {
-            val res: Resources = mContext.getResources()
+            val res: Resources = mContext.resources
             val url = res.getString(R.string.url)
             val urlObj = URL(url)
             val conn: HttpURLConnection = urlObj.openConnection() as HttpURLConnection
