@@ -1,24 +1,31 @@
 package com.example.mysor
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Activity
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
+import android.provider.MediaStore
+import android.view.View
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.mysor.listeners.OnLabelsListener
 import com.example.mysor.server.DownloadImageBitmapTask
-import com.example.mysor.server.DownloadImageTask
 import com.example.mysor.server.GetLabels
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptor
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import java.util.*
-import kotlin.collections.ArrayList
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
+
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, View.OnClickListener {
+
+    private val REQUEST_TAKE_PHOTO = 1
+    private lateinit var imageView : ImageView
 
     private lateinit var mMap: GoogleMap
 
@@ -29,6 +36,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
         val mapFragment = supportFragmentManager
                 .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        imageView = findViewById(R.id.imageView)
     }
 
     /**
@@ -48,7 +56,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
         mMap.addMarker(MarkerOptions().position(sydney).title("Тамбов"))
             .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
-        var getLabels = GetLabels(this,this)
+        var getLabels = GetLabels(this, this)
         getLabels.execute()
     }
 
@@ -65,5 +73,34 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener {
 
     override fun onLabelsError(error: String) {
         TODO("Not yet implemented")
+    }
+
+    override fun onClick(view: View?) {
+        when (view?.id) {
+            R.id.addLabel -> Camera()
+        }
+    }
+
+    fun Camera() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+        } catch (e: ActivityNotFoundException) {
+            e.printStackTrace()
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(requestCode){
+            REQUEST_TAKE_PHOTO ->{
+                if(resultCode == Activity.RESULT_OK && data !== null){
+                    imageView.setImageBitmap(data.extras?.get("data") as Bitmap)
+                }
+            }
+            else ->{
+                Toast.makeText(this, "Wrong request code", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
