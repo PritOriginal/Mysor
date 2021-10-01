@@ -1,21 +1,15 @@
-/*package com.example.mysor.server
+package com.example.mysor.server
 
-import android.R
-import android.content.ContentValues.TAG
+import android.content.ContentValues
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.AsyncTask
 import android.util.Log
-import java.io.DataOutputStream
-import java.io.File
-import java.io.FileInputStream
-import java.io.IOException
+import java.io.*
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.swing.JColorChooser.showDialog
 
-
-class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>() {
-    /
+class UploadImageTask2(var mContext : Context): AsyncTask<Bitmap, Integer, Boolean>() {
     /** Upload file to this url  */
     private val UPLOAD_URL = mContext.resources.getString(com.example.mysor.R.string.urlImage)
 
@@ -29,10 +23,10 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
      */
     override fun onPreExecute() {
         super.onPreExecute()
-        setProgressBarIndeterminateVisibility(true)
-        mConfirm.setEnabled(false)
-        mCancel.setEnabled(false)
-        JColorChooser.showDialog(UPLOAD_PROGRESS_DIALOG)
+        //setProgressBarIndeterminateVisibility(true)
+        //mConfirm.setEnabled(false)
+        //mCancel.setEnabled(false)
+        //JColorChooser.showDialog(UPLOAD_PROGRESS_DIALOG)
     }
 
     /**
@@ -40,39 +34,21 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
      */
     override fun onPostExecute(result: Boolean) {
         super.onPostExecute(result)
-        setProgressBarIndeterminateVisibility(false)
-        mConfirm.setEnabled(true)
-        mDialog.dismiss()
+        //setProgressBarIndeterminateVisibility(false)
+        //mConfirm.setEnabled(true)
+       // mDialog.dismiss()
         if (result) {
-            JColorChooser.showDialog(UPLOAD_SUCCESS_DIALOG)
+            //JColorChooser.showDialog(UPLOAD_SUCCESS_DIALOG)
         } else {
-            JColorChooser.showDialog(UPLOAD_ERROR_DIALOG)
+            //JColorChooser.showDialog(UPLOAD_ERROR_DIALOG)
         }
     }
 
-    override fun doInBackground(vararg image: File): Boolean? {
+    override fun doInBackground(vararg image: Bitmap?): Boolean {
         return doFileUpload(image[0], UPLOAD_URL)
     }
 
-    private fun onProgressUpdate(vararg values: Int) {
-        super.onProgressUpdate(values)
-        if (values[0] == 0) {
-            mDialog.setTitle(getString(R.string.progress_dialog_title_uploading))
-        }
-        mDialog.setProgress(values[0])
-    }
-
-    /**
-     * Upload given file to given url, using raw socket
-     * @see https://stackoverflow.com/questions/4966910/androidhow-to-upload-mp3-file-to-http-server
-     *
-     *
-     * @param file The file to upload
-     * @param uploadUrl The uri the file is to be uploaded
-     *
-     * @return boolean true is the upload succeeded
-     */
-    private fun doFileUpload(file: File, uploadUrl: String): Boolean {
+    private fun doFileUpload(bitmap: Bitmap?, uploadUrl: String): Boolean {
         var uploadUrl: String? = uploadUrl
         var conn: HttpURLConnection? = null
         var dos: DataOutputStream? = null
@@ -86,11 +62,37 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
         val buffer: ByteArray
         val maxBufferSize = 1 * 1024 * 1024
         var sentBytes = 0
+
+        //create a file to write bitmap data
+        var file = File(mContext.cacheDir, "1")
+        file.createNewFile()
+
+        //Convert bitmap to byte array
+        var bos = ByteArrayOutputStream()
+        bitmap?.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+        var bitmapdata = bos.toByteArray();
+
+        //write the bytes in file
+        var fos: FileOutputStream? = null;
+        try {
+            fos = FileOutputStream(file);
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace();
+        }
+        try {
+            fos?.write(bitmapdata);
+            fos?.flush();
+            fos?.close();
+        } catch (e: IOException) {
+            e.printStackTrace();
+        }
+
         val fileSize: Long = file.length()
 
         // The definitive url is of the kind:
         // http://host/report/latitude,longitude
-        uploadUrl += "/" + mLocation.getLatitude().toString() + "," + mLocation.getLongitude()
+        //* Пригодится
+        //*uploadUrl += "/" + mLocation.getLatitude().toString() + "," + mLocation.getLongitude()
 
         // Send request
         try {
@@ -103,12 +105,12 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
             conn.requestMethod = "PUT"
             conn.setRequestProperty("Connection", "Keep-Alive")
             conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=$boundary")
-            publishProgress(0)
+            //*publishProgress( 0)
             dos = DataOutputStream(conn.outputStream)
 
             // Send location params
-            writeFormField(dos, separator, FIELD_LATITUDE, "" + mLocation.getLatitude())
-            writeFormField(dos, separator, FIELD_LONGITUDE, "" + mLocation.getLongitude())
+            //*writeFormField(dos, separator, FIELD_LATITUDE, "" + mLocation.getLatitude())
+            //*writeFormField(dos, separator, FIELD_LONGITUDE, "" + mLocation.getLongitude())
 
             // Send multipart headers
             dos.writeBytes(twoHyphens + boundary + lineEnd)
@@ -130,7 +132,7 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
 
                 // Update progress dialog
                 sentBytes += bufferSize
-                publishProgress((sentBytes * 100 / fileSize).toInt())
+                //publishProgress((sentBytes * 100 / fileSize).toInt())
                 bytesAvailable = fileInputStream.available()
                 bufferSize = Math.min(bytesAvailable, maxBufferSize)
                 bytesRead = fileInputStream.read(buffer, 0, bufferSize)
@@ -143,7 +145,7 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
             dos.close()
             fileInputStream.close()
         } catch (ioe: IOException) {
-            Log.e(TAG, "Cannot upload file: " + ioe.getMessage(), ioe)
+            Log.e(ContentValues.TAG, "Cannot upload file: " + ioe.message, ioe)
             return false
         }
 
@@ -152,14 +154,13 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
             val responseCode: Int = conn.responseCode
             responseCode == 200
         } catch (ioex: IOException) {
-            Log.e(TAG, "Upload file failed: " + ioex.getMessage(), ioex)
+            Log.e(ContentValues.TAG, "Upload file failed: " + ioex.message, ioex)
             false
         } catch (e: Exception) {
-            Log.e(TAG, "Upload file failed: " + e.message, e)
+            Log.e(ContentValues.TAG, "Upload file failed: " + e.message, e)
             false
         }
     }
-
     @Throws(IOException::class)
     private fun writeFormField(dos: DataOutputStream?, separator: String, fieldName: String, fieldValue: String) {
         dos?.writeBytes(separator)
@@ -169,5 +170,3 @@ class UploadImageTask(var mContext : Context): AsyncTask<File, Integer, Boolean>
         dos?.writeBytes("\r\n")
     }
 }
-
- */

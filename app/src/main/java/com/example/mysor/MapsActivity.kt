@@ -20,6 +20,15 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import java.io.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, View.OnClickListener {
@@ -93,9 +102,52 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(requestCode){
-            REQUEST_TAKE_PHOTO ->{
-                if(resultCode == Activity.RESULT_OK && data !== null){
-                    imageView.setImageBitmap(data.extras?.get("data") as Bitmap)
+            REQUEST_TAKE_PHOTO -> {
+                if (resultCode == Activity.RESULT_OK && data !== null) {
+                    var bitmap = data.extras?.get("data")
+                    imageView.setImageBitmap(bitmap as Bitmap)
+
+                    //create a file to write bitmap data
+                    var file = File(cacheDir, "1")
+                    file.createNewFile()
+
+                    //Convert bitmap to byte array
+                    var bos = ByteArrayOutputStream()
+                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
+                    var bitmapdata = bos.toByteArray();
+
+                    //write the bytes in file
+                    var fos: FileOutputStream? = null;
+                    try {
+                        fos = FileOutputStream(file);
+                    } catch (e: FileNotFoundException) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        fos?.write(bitmapdata);
+                        fos?.flush();
+                        fos?.close();
+                    } catch (e: IOException) {
+                        e.printStackTrace();
+                    }
+                    val reqFile: RequestBody = RequestBody.create(MediaType.parse("image/*"), file)
+                    val body: MultipartBody.Part = MultipartBody.Part.createFormData("upload", file.name, reqFile)
+
+                    val service = Retrofit.Builder().baseUrl(resources.getString(R.string.urlImage)).build().create(Service::class.java)
+                    val req: Call<ResponseBody?>? = service.postImage(body)
+                    req?.enqueue(object : Callback<ResponseBody?> {
+                        override fun onResponse(call: Call<ResponseBody?>?, response: Response<ResponseBody?>?) {
+                            // Do Something with response
+                        }
+
+                        override fun onFailure(call: Call<ResponseBody?>?, t: Throwable) {
+                            //failure message
+                            t.printStackTrace()
+                        }
+                    })
+
+                    //var uploadImageTask = UploadImageTask2(this)
+                    // uploadImageTask.execute(bitmap as Bitmap?)
                 }
             }
             else ->{
