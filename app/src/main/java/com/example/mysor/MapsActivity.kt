@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mysor.listeners.OnLabelsListener
+import com.example.mysor.server.DownloadImage
 import com.example.mysor.server.DownloadImageBitmapTask
 import com.example.mysor.server.GetLabels
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -106,6 +107,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
                 if (resultCode == Activity.RESULT_OK && data !== null) {
                     var bitmap = data.extras?.get("data")
                     imageView.setImageBitmap(bitmap as Bitmap)
+                    var downloadImage = DownloadImage(this, bitmap)
+                    downloadImage.execute()
+                    /*
+                    var bitmap = data.extras?.get("data")
+                    imageView.setImageBitmap(bitmap as Bitmap)
 
                     //create a file to write bitmap data
                     var file = File(cacheDir, "1")
@@ -146,6 +152,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
                         }
                     })
 
+                     */
+                     */
                     //var uploadImageTask = UploadImageTask2(this)
                     // uploadImageTask.execute(bitmap as Bitmap?)
                 }
