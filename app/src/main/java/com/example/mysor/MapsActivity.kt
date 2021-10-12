@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mysor.listeners.OnLabelsListener
+import com.example.mysor.server.AddLabel
 import com.example.mysor.server.DownloadImage
 import com.example.mysor.server.DownloadImageBitmapTask
 import com.example.mysor.server.GetLabels
@@ -105,57 +106,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
         when(requestCode){
             REQUEST_TAKE_PHOTO -> {
                 if (resultCode == Activity.RESULT_OK && data !== null) {
-                    var bitmap = data.extras?.get("data")
-                    imageView.setImageBitmap(bitmap as Bitmap)
+                    var bitmap : Bitmap = data.extras?.get("data") as Bitmap
+                    imageView.setImageBitmap(bitmap)
+                    /*
+                    // Просто загрузка изображения
                     var downloadImage = DownloadImage(this, bitmap)
                     downloadImage.execute()
-                    /*
-                    var bitmap = data.extras?.get("data")
-                    imageView.setImageBitmap(bitmap as Bitmap)
-
-                    //create a file to write bitmap data
-                    var file = File(cacheDir, "1")
-                    file.createNewFile()
-
-                    //Convert bitmap to byte array
-                    var bos = ByteArrayOutputStream()
-                    bitmap?.compress(Bitmap.CompressFormat.JPEG, 0 /*ignored for PNG*/, bos);
-                    var bitmapdata = bos.toByteArray();
-
-                    //write the bytes in file
-                    var fos: FileOutputStream? = null;
-                    try {
-                        fos = FileOutputStream(file);
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace();
-                    }
-                    try {
-                        fos?.write(bitmapdata);
-                        fos?.flush();
-                        fos?.close();
-                    } catch (e: IOException) {
-                        e.printStackTrace();
-                    }
-                    val reqFile: RequestBody = RequestBody.create(MediaType.parse("image/*"), file)
-                    val body: MultipartBody.Part = MultipartBody.Part.createFormData("upload", file.name, reqFile)
-
-                    val service = Retrofit.Builder().baseUrl(resources.getString(R.string.urlImage)).build().create(Service::class.java)
-                    val req: Call<ResponseBody?>? = service.postImage(body)
-                    req?.enqueue(object : Callback<ResponseBody?> {
-                        override fun onResponse(call: Call<ResponseBody?>?, response: Response<ResponseBody?>?) {
-                            // Do Something with response
-                        }
-
-                        override fun onFailure(call: Call<ResponseBody?>?, t: Throwable) {
-                            //failure message
-                            t.printStackTrace()
-                        }
-                    })
-
                      */
-                     */
-                    //var uploadImageTask = UploadImageTask2(this)
-                    // uploadImageTask.execute(bitmap as Bitmap?)
+                    var addLabel = AddLabel(this, bitmap)
+                    addLabel.execute()
                 }
             }
             else ->{

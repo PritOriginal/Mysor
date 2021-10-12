@@ -7,6 +7,7 @@ import android.os.AsyncTask
 import android.os.Build
 import android.util.Base64
 import androidx.annotation.RequiresApi
+import com.example.mysor.GPSTracker
 import com.example.mysor.R
 import java.io.*
 import java.net.HttpURLConnection
@@ -14,7 +15,9 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class DownloadImage(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Integer, Boolean>() {
+class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Integer, Boolean>() {
+    var latitude: Double = 0.0
+    var longitude: Double = 0.0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doInBackground(vararg p0: URL?): Boolean {
@@ -24,9 +27,18 @@ class DownloadImage(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, I
 
         val ImageBase: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
 
+        val gps = GPSTracker(mContext)
+        if (gps.canGetLocation()) {
+            latitude = gps.latitude
+            longitude = gps.longitude
+        }
+        val coordinates = "$latitude,$longitude"
         var params = HashMap<String, String>()
-        params.put("REQUEST", "downloadImage")
-        params.put("IMAGE", ImageBase)
+        params["REQUEST"] = "addLabels"
+        params["COORDINATES"] = coordinates
+        params["DESCRIPTION"] = "test"
+        params["TYPE"] = "m"
+        params["IMAGE"] = ImageBase
         var data: String? = null
 
         val sbParams = StringBuilder()
