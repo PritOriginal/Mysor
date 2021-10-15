@@ -40,6 +40,7 @@
         android2:id="@+id/imageView"
         android2:layout_width="144dp"
         android2:layout_height="208dp"
+        android2:visibility="invisible"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
         map:srcCompat="@drawable/rubbish" />

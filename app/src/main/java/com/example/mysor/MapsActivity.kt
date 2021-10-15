@@ -88,7 +88,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
 
     override fun onClick(view: View?) {
         when (view?.id) {
-            R.id.addLabel -> Camera()
+            //R.id.addLabel -> Camera()
+            R.id.addLabel -> AddProblem()
         }
     }
 
@@ -99,6 +100,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
         } catch (e: ActivityNotFoundException) {
             e.printStackTrace()
         }
+    }
+
+    fun AddProblem() {
+        val intent = Intent(this, AddProblemActivity::class.java)
+        startActivity(intent)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,6 +119,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
                     var downloadImage = DownloadImage(this, bitmap)
                     downloadImage.execute()
                      */
+
+                    // Добавление метки
                     var addLabel = AddLabel(this, bitmap)
                     addLabel.execute()
                 }
