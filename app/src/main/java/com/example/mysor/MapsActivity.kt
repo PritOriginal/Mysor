@@ -1,5 +1,6 @@
 package com.example.mysor
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -7,7 +8,9 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mysor.listeners.OnLabelsListener
@@ -37,9 +40,9 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
 
     private val REQUEST_TAKE_PHOTO = 1
     private lateinit var imageView : ImageView
-
     private lateinit var mMap: GoogleMap
 
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)

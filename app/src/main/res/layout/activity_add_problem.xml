@@ -1,45 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:android2="http://schemas.android.com/apk/res-auto"
+    xmlns:map="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/description"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/editTextTextPersonName"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="8dp"
-        android:background="@drawable/edit_text"
-        android:ems="10"
-        android:hint="@string/description"
-        android:inputType="textPersonName" />
+        <include
+            layout="@layout/new_problem_info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="8dp"
-        android:paddingTop="8dp"
-        android:text="@string/type"
-        android:textColor="@color/black"
-        android:textSize="18sp" />
+    </LinearLayout>
 
-    <Spinner
-        android:id="@+id/spinner"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/edit_text"
-        android:entries="@array/types"
-        android:padding="8dp" />
-</LinearLayout>
+        android:layout_gravity="end|bottom"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/rubbish" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
