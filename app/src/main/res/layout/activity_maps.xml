@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="schemas.android.com/apk/res/android"
+    xmlns:android2="http://schemas.android.com/apk/res/android"
     xmlns:map="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MapsActivity" />
+    android2:id="@+id/linearLayout"
+    android2:layout_width="match_parent"
+    android2:layout_height="match_parent"
+    android:layout_height="fill_pare"
+    android:layout_width="fill_parent"
+    android:orientation="vertical"
+    tools:ignore="NamespaceTypo">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android2:id="@+id/addLabel"
+        android2:layout_width="wrap_content"
+        android2:layout_height="wrap_content"
+        android2:layout_marginEnd="16dp"
+        android2:layout_marginBottom="16dp"
+        android2:clickable="true"
+        android2:onClick="onClick"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:srcCompat="@android:drawable/ic_input_add" />
+
+    <fragment
+        android2:id="@+id/map"
+        android2:name="com.google.android.gms.maps.SupportMapFragment"
+        android2:layout_width="0dp"
+        android2:layout_height="0dp"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintHorizontal_bias="0.0"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:layout_constraintVertical_bias="0.0"
+        tools:context=".MapsActivity" />
+
+    <ImageView
+        android2:id="@+id/imageView"
+        android2:layout_width="144dp"
+        android2:layout_height="208dp"
+        android2:visibility="invisible"
+        map:layout_constraintStart_toStartOf="parent"
+        map:layout_constraintTop_toTopOf="parent"
+        map:srcCompat="@drawable/rubbish" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
