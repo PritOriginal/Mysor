@@ -1,38 +1,33 @@
 package com.example.mysor
 
-import android.R
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 
 
-class TypesAdapter(context: Context, resource: Int,var types: List<String>) : ArrayAdapter<String>(context, resource, types) {
-    override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return super.getDropDownView(position, convertView, parent)
+class TypesAdapter(val context: Context, var icons: IntArray, var types: List<String>) : BaseAdapter() {
+    override fun getCount(): Int {
+        return types.size
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        return super.getCustomView(position, convertView, parent)
+    override fun getItem(i: Int): Any? {
+        return null
     }
 
-    fun getCustomView(position: Int, convertView: View?, parent: ViewGroup) : View {
-        val inflater: LayoutInflater = LayoutInflater.from(context)
-        val row: View = inflater.inflate(R.layout.spinner_dropdown_item, parent, false)
-        val label = row.findViewById<View>(R.id.weekofday) as TextView
-        label.text = types[position]
-
-        val icon: ImageView = row.findViewById<View>(R.id.type_) as ImageView
-
-        if (dayOfWeek.get(position) === "Котопятница"
-                || dayOfWeek.get(position) === "Субкота") {
-            icon.setImageResource(R.drawable.paw_on)
-        } else {
-            icon.setImageResource(R.drawable.ic_launcher)
-        }
-        return row
+    override fun getItemId(i: Int): Long {
+        return 0
     }
-}
+
+    override fun getView(i: Int, view: View?, viewGroup: ViewGroup?): View {
+        val inflater = LayoutInflater.from(context)
+        var view = inflater.inflate(R.layout.spinner_dropdown_item, null);
+        var icon = view.findViewById<ImageView>(R.id.type_image)
+        var type = view.findViewById<TextView>(R.id.type_label)
+        icon.setImageResource(icons[i])
+        type.text = types[i]
+        return view
+    }
