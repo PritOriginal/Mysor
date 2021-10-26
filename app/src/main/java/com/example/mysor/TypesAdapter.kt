@@ -31,3 +31,4 @@ class TypesAdapter(val context: Context, var icons: IntArray, var types: List<St
         type.text = types[i]
         return view
     }
+}
