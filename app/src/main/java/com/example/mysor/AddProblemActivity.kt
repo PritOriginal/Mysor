@@ -14,6 +14,8 @@ class AddProblemActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_problem)
         spinner = findViewById(R.id.spinner)
+        var typesAdapter = TypesAdapter(this, icons, types)
+        spinner.adapter = typesAdapter
         ArrayAdapter.createFromResource(
                 this,
                 R.array.types,
