@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="4dp"
     android:gravity="center_vertical">
 
     <ImageView
@@ -16,6 +17,7 @@
         android:id="@+id/type_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:textColor="@color/black"
         android:textSize="18sp"
         tools:text="Мусорка" />
