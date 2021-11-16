@@ -16,7 +16,7 @@
         android:textSize="18sp" />
 
     <EditText
-            android:id="@+id/editTextTextPersonName"
+            android:id="@+id/newDescriptionLabel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/edit_text"

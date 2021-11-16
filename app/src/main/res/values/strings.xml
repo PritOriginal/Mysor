@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Mysor</string>
     <string name="title_activity_maps">Map</string>
-    <string name="url">http:/192.168.243.90/mysor/server.py</string>
-    <string name="urlImage">http:/192.168.243.90/mysor/images</string>
+    <string name="url">http:/192.168.1.10/mysor/server.py</string>
+    <string name="urlImage">http:/192.168.1.10/mysor/images</string>
     <string name="description">Описание</string>
     <string name="type">Тип</string>
     <string-array name="types">

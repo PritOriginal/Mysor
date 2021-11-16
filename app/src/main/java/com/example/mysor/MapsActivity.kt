@@ -8,14 +8,11 @@ import android.graphics.Bitmap
 import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.mysor.listeners.OnLabelsListener
 import com.example.mysor.server.AddLabel
-import com.example.mysor.server.DownloadImage
 import com.example.mysor.server.DownloadImageBitmapTask
 import com.example.mysor.server.GetLabels
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -25,15 +22,6 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import java.io.*
 
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, View.OnClickListener {
@@ -124,8 +112,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
                      */
 
                     // Добавление метки
-                    var addLabel = AddLabel(this, bitmap)
-                    addLabel.execute()
+                    //var addLabel = AddLabel(this, bitmap)
+                    //addLabel.execute()
                 }
             }
             else ->{

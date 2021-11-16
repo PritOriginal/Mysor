@@ -15,7 +15,7 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Integer, Boolean>() {
+class AddLabel(var mContext: Context, var bitmap: Bitmap, var description: String, var type: String): AsyncTask<URL, Integer, Boolean>() {
     var latitude: Double = 0.0
     var longitude: Double = 0.0
 
@@ -36,8 +36,8 @@ class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Intege
         var params = HashMap<String, String>()
         params["REQUEST"] = "addLabels"
         params["COORDINATES"] = coordinates
-        params["DESCRIPTION"] = "test"
-        params["TYPE"] = "m"
+        params["DESCRIPTION"] = description
+        params["TYPE"] = type
         params["IMAGE"] = ImageBase
         var data: String? = null
 
