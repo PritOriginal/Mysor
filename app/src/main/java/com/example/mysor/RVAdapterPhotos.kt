@@ -13,11 +13,10 @@ class RVAdapterPhotos(var mContext: Context, var photos: ArrayList<Bitmap>) : Re
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         //var cv: CardView
-        var image: ImageView
+        var image: ImageView = itemView.findViewById(R.id.photo) as ImageView
 
         init {
             //cv = itemView.findViewById(R.id.cv)
-            image = itemView.findViewById(R.id.recyclerViewPhotos) as ImageView
         }
     }
 

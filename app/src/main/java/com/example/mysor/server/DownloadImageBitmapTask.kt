@@ -10,10 +10,14 @@ import com.example.mysor.R
 import java.io.InputStream
 import java.net.URL
 
-class DownloadImageBitmapTask(var mContext : Context) : AsyncTask<String, Void, Bitmap>() {
+class DownloadImageBitmapTask(var mContext : Context, var image : Int) : AsyncTask<String, Void, Bitmap>() {
     override fun doInBackground(vararg urls: String?): Bitmap? {
         val res: Resources = mContext.resources
-        val url = res.getString(R.string.urlImage) + "/repair.png"
+        var url = ""
+        when (image) {
+            0 -> url = res.getString(R.string.urlImage) + "/repair.png"
+            1 -> url = res.getString(R.string.urlImage) + "/in.png"
+        }
         var urldisplay = url
         var mIcon11 : Bitmap? = null
         try {

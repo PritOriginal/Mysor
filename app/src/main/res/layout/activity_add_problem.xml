@@ -28,10 +28,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="16dp"
+        android:onClick="onClick"
+        android:src="@drawable/rubbish"
+        android2:backgroundTint="@color/white" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/rubbish"
-        android:onClick="onClick"
-        />
+        android:clickable="true"
+        android2:backgroundTint="@color/white"
+        android2:srcCompat="@android:drawable/checkbox_on_background" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

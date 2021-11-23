@@ -56,14 +56,14 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, OnLabelsListener, 
         // Add a marker in Sydney and move the camera
         val sydney = LatLng(52.737075164450516, 41.439688759798806)
         mMap.addMarker(MarkerOptions().position(sydney).title("Тамбов"))
-            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish))
+            .setIcon(BitmapDescriptorFactory.fromResource(R.drawable.rubbish2))
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 10f))
         var getLabels = GetLabels(this, this)
         getLabels.execute()
     }
 
     override fun onLabelsCompleted(labels: ArrayList<Label>) {
-        var downloadImageBitmapTask = DownloadImageBitmapTask(this)
+        var downloadImageBitmapTask = DownloadImageBitmapTask(this, 1)
         downloadImageBitmapTask.execute()
         val image = downloadImageBitmapTask.get()
         for (label in labels) {
