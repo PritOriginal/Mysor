@@ -5,6 +5,7 @@
     <string name="urlImage">http:/192.168.1.10/mysor/images</string>
     <string name="description">Описание</string>
     <string name="type">Тип</string>
+    <string name='pollution'>Загрязнённость</string>
     <string-array name="types">
         <item>Мусорка</item>
         <item>Яма</item>

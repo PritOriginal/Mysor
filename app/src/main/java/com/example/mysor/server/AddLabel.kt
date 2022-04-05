@@ -15,18 +15,12 @@ import java.net.URL
 import java.net.URLEncoder
 
 
-class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Integer, Boolean>() {
+class AddLabel(var mContext: Context, var bitmap: ArrayList<Bitmap>, var description: String, var type: String, var level: Float): AsyncTask<URL, Integer, Boolean>() {
     var latitude: Double = 0.0
     var longitude: Double = 0.0
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun doInBackground(vararg p0: URL?): Boolean {
-        val byteArrayOutputStream = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
-        val byteArray = byteArrayOutputStream.toByteArray()
-
-        val ImageBase: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
-
         val gps = GPSTracker(mContext)
         if (gps.canGetLocation()) {
             latitude = gps.latitude
@@ -36,11 +30,13 @@ class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Intege
         var params = HashMap<String, String>()
         params["REQUEST"] = "addLabels"
         params["COORDINATES"] = coordinates
-        params["DESCRIPTION"] = "test"
-        params["TYPE"] = "m"
-        params["IMAGE"] = ImageBase
+        params["DESCRIPTION"] = description
+        params["TYPE"] = type
+        params["LEVEL"] = level.toInt().toString()
         var data: String? = null
+        val sbParams = StringBuilder()
 
+        /*
         val sbParams = StringBuilder()
         var i = 0
         for (key in params.keys) {
@@ -55,6 +51,40 @@ class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Intege
             }
             i++
         }
+
+         */
+        try {
+            //sbParams.append("REQUEST").append("=")
+            //    .append(URLEncoder.encode(params["REQUEST"], "UTF-8"))
+            var i = 0
+            for (key in params.keys) {
+                try {
+                    if (i != 0) {
+                        sbParams.append("&")
+                    }
+                    sbParams.append(key).append("=")
+                        .append(URLEncoder.encode(params[key], "UTF-8"))
+                } catch (e: UnsupportedEncodingException) {
+                    e.printStackTrace()
+                }
+                i++
+            }
+            for (bit in bitmap) {
+                val byteArrayOutputStream = ByteArrayOutputStream()
+                bit.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+                val byteArray = byteArrayOutputStream.toByteArray()
+
+                val ImageBase: String = Base64.encodeToString(byteArray, Base64.DEFAULT)
+
+                params["IMAGE"] = ImageBase
+
+                sbParams.append("&").append("IMAGE").append("=")
+                    .append(URLEncoder.encode(params["IMAGE"], "UTF-8"))
+            }
+        } catch (e: UnsupportedEncodingException) {
+            e.printStackTrace()
+        }
+
         try {
             val res: Resources = mContext.resources
             val url = res.getString(R.string.url)
@@ -63,7 +93,7 @@ class AddLabel(var mContext: Context, var bitmap: Bitmap): AsyncTask<URL, Intege
             try {
                 val postDataBytes =
                         sbParams.toString().toByteArray(charset("UTF-8"))
-                print(sbParams)
+                //print(sbParams)
                 conn.apply {
                     setRequestProperty("Accept", "application/text")
                     setRequestProperty("Content-Length", postDataBytes.size.toString())
