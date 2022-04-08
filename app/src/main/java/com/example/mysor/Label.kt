@@ -2,8 +2,11 @@ package com.example.mysor
 
 import com.google.android.gms.maps.model.LatLng
 
-class Label (private var id : Int, private var coordinates : LatLng, private var description: String, private var type: String) {
+class Label (private var id : Int, private var coordinates : LatLng, private var description: String, private var type: String, private var level: Int) {
 
+    fun getId() : Int {
+        return id
+    }
     fun setCoordinates(coordinates: LatLng) {
         this.coordinates = coordinates
     }
@@ -17,6 +20,13 @@ class Label (private var id : Int, private var coordinates : LatLng, private var
         return description
     }
     fun setType(type: String) {
-        this.type
+        this.type = type
     }
+    fun setLavel(lavel: Int) {
+        this.level = lavel
+    }
+    fun getLevel(): Int {
+        return level
+    }
+
 }

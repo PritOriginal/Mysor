@@ -14,7 +14,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Mysor"
-
         android:usesCleartextTraffic="true">
 
         <!--
@@ -34,7 +33,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddProblemActivity"></activity>
+        <activity
+            android:name=".AddProblemActivity"
+            android:label="Добавить метку"
+            android:theme="@style/Theme.Design.NoActionBar">
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
