@@ -99,7 +99,8 @@ class GetLabels(var mContext : Context, var listener: OnLabelsListener) : AsyncT
                     val LatCoordinates = LatLng(x, y)
                     val description = jObject.getString("description")
                     val type = jObject.getString("type")
-                    val label = Label(id, LatCoordinates, description, type)
+                    val level = jObject.getInt("level")
+                    val label = Label(id, LatCoordinates, description, type, level)
                     labels.add(label)
                     i++
                 }

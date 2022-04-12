@@ -45,4 +45,26 @@
         map:layout_constraintTop_toTopOf="parent"
         map:srcCompat="@drawable/rubbish" />
 
+    <ScrollView
+        android2:id="@+id/scrollView2"
+        android2:layout_width="0dp"
+        android2:layout_height="250dp"
+        android2:visibility="invisible"
+        map:layout_constraintBottom_toBottomOf="parent"
+        map:layout_constraintEnd_toEndOf="parent"
+        map:layout_constraintStart_toStartOf="parent">
+
+        <LinearLayout
+            android2:layout_width="match_parent"
+            android2:layout_height="wrap_content"
+            android2:orientation="vertical">
+
+            <include
+                layout="@layout/label_info"
+                android2:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content" />
+        </LinearLayout>
+    </ScrollView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
